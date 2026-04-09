@@ -19,9 +19,9 @@ def create_embedding(params: EmbeddingCreateParams):
         raise HTTPException(
             status_code=400, detail="input must be a string or list of strings"
         )
-    
+
     vectors = [vec.tolist() for vec in embed_text(texts)]
-    
+
     return {
         "object": "list",
         "data": [
