@@ -11,6 +11,6 @@ router.include_router(models_route.router, prefix="/models", tags=["models"])
 
 
 # Health check endpoint
-@router.get("/health")
+@router.get("/health",tags=["health"])
 def health_check():
     return {"status": "healthy", "message": "API is running"}
