@@ -24,14 +24,17 @@ def create_embedding(params: CreateEmbeddingRequest):
     if not validate_model_id(model_id):
         raise HTTPException(status_code=404, detail=f"Invalid model_id: {model_id}")
 
-    vectors = [vec.tolist() for vec in embed_text(texts, model_id=model_id)]
+    result = embed_text(texts, model_id=model_id)
 
     return {
         "object": "list",
         "data": [
             {"object": "embedding", "index": i, "embedding": v}
-            for i, v in enumerate(vectors)
+            for i, v in enumerate(result.vectors)
         ],
-        "model": model_id,
-        "usage": {"prompt_tokens": 0, "total_tokens": 0},
+        "model": result.model_used,
+        "usage": {
+            "prompt_tokens": result.prompt_tokens,
+            "total_tokens": result.prompt_tokens,
+        },
     }
