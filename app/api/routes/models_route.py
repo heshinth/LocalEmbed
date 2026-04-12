@@ -1,24 +1,12 @@
 from fastapi import APIRouter
-from fastembed import TextEmbedding
-from app.api.schemas.list_models import ModelListResponse, ModelInfo, ModelType
+from app.api.schemas.list_models import ModelListResponse
+from app.services.model_registery import get_dense_models
 
 router = APIRouter()
 
 
 @router.get("/", response_model=ModelListResponse)
 def list_models():
-    dense_models = TextEmbedding.list_supported_models()
+    dense_model_data = get_dense_models()
 
-    data = [
-        ModelInfo(
-            id=m["model"],
-            type=ModelType.DENSE,
-            dimensions=m.get("dim"),
-            description=m.get("description"),
-            license=m.get("license"),
-            size_in_GB=m.get("size_in_GB"),
-        )
-        for m in dense_models
-    ]
-
-    return ModelListResponse(object="list", data=data)
+    return ModelListResponse(object="list", data=dense_model_data)
