@@ -20,6 +20,9 @@ def preload_default_model():
     """Hook to pre-load the default model during startup."""
     logger.info("Preloading default embedding model...")
     get_model(settings.DEFAULT_EMBEDDING_MODEL)
+    logger.info(
+        f"Default embedding model {settings.DEFAULT_EMBEDDING_MODEL} preloaded successfully."
+    )
 
 
 class EmbeddingResult(BaseModel):
