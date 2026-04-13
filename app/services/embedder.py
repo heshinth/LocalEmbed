@@ -2,8 +2,9 @@ from typing import Iterable
 from pydantic import BaseModel
 from fastembed import TextEmbedding
 from loguru import logger
+from app.config import settings
 
-DEFAULT_EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
+DEFAULT_EMBEDDING_MODEL = settings.DEFAULT_EMBEDDING_MODEL
 
 
 class EmbeddingResult(BaseModel):
