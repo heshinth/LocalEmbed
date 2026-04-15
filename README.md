@@ -21,7 +21,7 @@ A fast and simple local API for generating text embeddings.
 The easiest and recommended way to run LocalEmbed is using the pre-built Docker image from Docker Hub.
 
 ```bash
-docker run -p 8000:8000 heshinth/localembed:latest
+docker run -d --name localembed -p 8000:8000 heshinth/localembed:latest
 ```
 The API will be available at `http://localhost:8000`.
 
