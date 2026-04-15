@@ -1,6 +1,6 @@
 [project]
 name = "localembed"
-version = "0.0.1"
+version = "0.1.0"
 description = "LocalEmbed"
 readme = "README.md"
 authors = [
