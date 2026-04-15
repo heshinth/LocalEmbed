@@ -1,6 +1,6 @@
 # LocalEmbed
 
-![GitHub License](https://img.shields.io/github/license/heshinth/LocalEmbed?cacheSeconds=30)
+![GitHub License](https://img.shields.io/github/license/heshinth/LocalEmbed?cacheSeconds=20)
 ![Python](https://img.shields.io/badge/python-3.12-blue.svg)
 
 A fast and simple local API for generating text embeddings.

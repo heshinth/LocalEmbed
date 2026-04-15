@@ -1,7 +1,7 @@
 [project]
 name = "localembed"
 version = "0.1.0"
-description = "LocalEmbed"
+description = "A fast and simple local API for generating text embeddings."
 readme = "README.md"
 authors = [
     { name = "Heshinth P", email = "heshinth@gmail.com" }

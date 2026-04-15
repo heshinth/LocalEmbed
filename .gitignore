@@ -8,6 +8,7 @@ __pycache__/
 
 # Project specific
 repomix-output.md
+internaltests/
 
 # Distribution / packaging
 .Python
