@@ -13,10 +13,19 @@ A fast and simple local API for generating text embeddings.
 ## Getting Started
 
 ### Prerequisites
-- Python 3.11+ (for local development)
-- Docker (optional, for containerized deployment)
+- Docker (Recommended)
+- Python 3.12+ (for local development)
 
-### Running Locally
+### Using Docker (Recommended)
+
+The easiest and recommended way to run LocalEmbed is using the pre-built Docker image from Docker Hub.
+
+```bash
+docker run -p 8000:8000 heshinth/localembed:latest
+```
+The API will be available at `http://localhost:8000`.
+
+### Running Locally (Development)
 
 1. Install the dependencies:
    ```bash
@@ -27,19 +36,13 @@ A fast and simple local API for generating text embeddings.
    ```bash
    fastapi dev app/main.py
    ```
-   The API will be available at `http://localhost:8000`.
 
-### Running with Docker
+### Building the Docker image manually
 
-1. Build the Docker image:
-   ```bash
-   docker build -t localembed .
-   ```
-
-2. Run the container:
-   ```bash
-   docker run -p 8000:8000 localembed
-   ```
+```bash
+docker build -t localembed .
+docker run -p 8000:8000 localembed
+```
 
 ## Supported Models
 
