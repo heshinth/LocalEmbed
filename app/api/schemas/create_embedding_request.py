@@ -9,5 +9,5 @@ class CreateEmbeddingRequest(BaseModel):
     model: str
     """ID of the model to use. See the /v1/models endpoint for a list of available models."""
 
-    dimensions: int | None = None
-    """The number of dimensions the resulting output embeddings should have."""
+    # dimensions: int | None = None
+    # TODO: """The number of dimensions the resulting output embeddings should have."""
