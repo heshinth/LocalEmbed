@@ -40,7 +40,7 @@ The easiest and recommended way to run LocalEmbed is using the pre-built Docker 
 #### Option 1: Docker CLI
 
 ```bash
-docker run -d --name localembed --env-file .env -p 8000:8000 heshinth/localembed:latest
+docker run -d --pull=always --name localembed --env-file .env -p 8000:8000 heshinth/localembed:latest
 ```
 
 #### Option 2: Using Docker Compose

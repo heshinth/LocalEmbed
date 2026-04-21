@@ -71,5 +71,5 @@ jobs:
 
                       Or for the latest version:
                       ```bash
-                      docker run -d --name localembed -p 8000:8000 heshinth/localembed:latest
+                      docker run -d --pull=always --name localembed --env-file .env -p 8000:8000 heshinth/localembed:latest
                       ```
