@@ -12,7 +12,9 @@ def get_model(model_id: str) -> TextEmbedding:
 
     if model_id not in model_cache:
         logger.info(f"Loading embedding model into memory: {model_id}")
-        model_cache[model_id] = TextEmbedding(model_id, threads=settings.EMBEDDING_THREADS)
+        model_cache[model_id] = TextEmbedding(
+            model_id, threads=settings.EMBEDDING_THREADS
+        )
     return model_cache[model_id]
 
 
@@ -45,7 +47,7 @@ def embed_text(
 
     try:
         # model.embed natively batches an iterable of documents giving an iterable of numpy arrays
-        vectors = [vec.tolist() for vec in model.embed(texts)]
+        vectors = [vec.tolist() for vec in model.embed(texts,batch_size=settings.EMBEDDING_BATCH_SIZE)]
 
         # token_count returns an iterator of ints (tokens per document), so we sum them
         total_tokens = model.token_count(texts)

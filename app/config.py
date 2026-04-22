@@ -18,5 +18,8 @@ class Settings(BaseSettings):
     EMBEDDING_THREADS: int = 8
     """Number of threads to use for embedding generation. Adjust based on your CPU capabilities."""
 
+    BATCH_SIZE: int = 256
+    """Batch size for embedding generation. Adjust based on your system's memory and performance."""
+
 
 settings = Settings()
