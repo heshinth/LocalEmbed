@@ -1,6 +1,7 @@
 services:
   localembed:
     image: heshinth/localembed:latest
+    pull_policy: always
     container_name: localembed
     ports:
       - "8000:8000"
