@@ -14,14 +14,16 @@ WORKDIR /app
 COPY pyproject.toml uv.lock README.md .python-version ./
 
 # uv will automatically download Python 3.12 (based on your pyproject.toml),
+RUN uv venv
+
 # and install dependencies into a standalone virtual environment at /app/.venv
-RUN uv sync --locked --no-cache --no-dev --no-install-project --extra gpu
+RUN uv sync --locked --no-dev --no-install-project --extra gpu
 
 # Copy your application code
 COPY app ./app
 
 # Run a final sync to install your actual project code
-RUN uv sync --locked --no-cache --no-dev --extra gpu
+RUN uv sync --locked --no-dev --extra gpu
 
 # Signal the app to use GPU logic
 ENV USE_GPU=True

@@ -1,6 +1,6 @@
 services:
   localembed:
-    image: heshinth/localembed-gpu:gpu
+    image: heshinth/localembed:latest-gpu
     pull_policy: always
     container_name: localembed-gpu
     ports:

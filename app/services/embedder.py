@@ -12,9 +12,20 @@ def get_model(model_id: str) -> TextEmbedding:
 
     if model_id not in model_cache:
         logger.info(f"Loading embedding model into memory: {model_id}")
+
+        # Configure providers based on GPU setting
+        providers = None
+        if settings.USE_GPU:
+            providers = ["CUDAExecutionProvider"]
+            logger.info("GPU acceleration (CUDAExecutionProvider) enabled.")
+
         model_cache[model_id] = TextEmbedding(
-            model_id, threads=settings.EMBEDDING_THREADS
+            model_id, threads=settings.EMBEDDING_THREADS, providers=providers
         )
+
+        providers = model_cache[model_id].model.model.get_providers()
+        logger.info(f"Model {model_id} loaded successfully with providers: {providers}")
+
     return model_cache[model_id]
 
 
@@ -47,7 +58,9 @@ def embed_text(
 
     try:
         # model.embed natively batches an iterable of documents giving an iterable of numpy arrays
-        vectors = [vec.tolist() for vec in model.embed(texts,batch_size=settings.BATCH_SIZE)]
+        vectors = [
+            vec.tolist() for vec in model.embed(texts, batch_size=settings.BATCH_SIZE)
+        ]
 
         # token_count returns an iterator of ints (tokens per document), so we sum them
         total_tokens = model.token_count(texts)
