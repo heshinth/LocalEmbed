@@ -62,7 +62,7 @@ def embed_text(
             vec.tolist() for vec in model.embed(texts, batch_size=settings.BATCH_SIZE)
         ]
 
-        # token_count returns an iterator of ints (tokens per document), so we sum them
+        # token_count returns a single int for total tokens
         total_tokens = model.token_count(texts)
 
         return EmbeddingResult(

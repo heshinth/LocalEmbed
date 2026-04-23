@@ -22,3 +22,6 @@ dev = [
 [project.optional-dependencies]
 cpu = ["fastembed>=0.8.0"]
 gpu = ["fastembed-gpu>=0.8.0"]
+
+[tool.poe.tasks]
+summary = "npx repomix@latest --style markdown"
