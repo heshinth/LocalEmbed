@@ -8,6 +8,6 @@ services:
     environment:
       - DEFAULT_EMBEDDING_MODEL=BAAI/bge-small-en-v1.5
       # - HF_TOKEN=your_token_here
+      # - MODEL_CACHE_LIMIT=2
       # - EMBEDDING_THREADS=8
       # - BATCH_SIZE=256
-  

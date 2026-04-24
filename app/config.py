@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     DEFAULT_EMBEDDING_MODEL: str = "BAAI/bge-small-en-v1.5"
     """The default embedding model to use."""
 
+    MODEL_CACHE_LIMIT: int = 2
+    """Maximum number of models to keep in memory (LRU eviction)."""
+
     EMBEDDING_THREADS: int = 8
     """Number of threads to use for embedding generation. Adjust based on your CPU capabilities."""
 

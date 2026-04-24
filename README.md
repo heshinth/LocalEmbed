@@ -41,6 +41,7 @@ Environment variables:
 
 - `DEFAULT_EMBEDDING_MODEL`: model to preload on startup
 - `HF_TOKEN`: optional, useful to avoid model download rate limits
+- `MODEL_CACHE_LIMIT`: max number of models kept in memory (LRU eviction)
 - `EMBEDDING_THREADS`: CPU threads for embedding computation
 - `BATCH_SIZE`: number of inputs processed per batch
 - `USE_GPU`: set `true` to force CUDA provider in local/non-GPU-image runs

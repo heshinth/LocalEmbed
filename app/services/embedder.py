@@ -1,16 +1,33 @@
+from collections import OrderedDict
+from threading import RLock
 from typing import Iterable
 from pydantic import BaseModel
 from fastembed import TextEmbedding
 from loguru import logger
 from app.config import settings
 
-model_cache: dict[str, TextEmbedding] = {}
+model_cache: OrderedDict[str, TextEmbedding] = OrderedDict()
+model_cache_lock = RLock()
+
+
+def _evict_lru_models_if_needed() -> None:
+    cache_limit = max(1, settings.MODEL_CACHE_LIMIT)
+    while len(model_cache) > cache_limit:
+        evicted_model_id, _ = model_cache.popitem(last=False)
+        logger.info(
+            f"Evicting least recently used embedding model from memory: {evicted_model_id}"
+        )
 
 
 def get_model(model_id: str) -> TextEmbedding:
     """Fetch the model from cache, or load it if not present."""
 
-    if model_id not in model_cache:
+    with model_cache_lock:
+        cached_model = model_cache.get(model_id)
+        if cached_model is not None:
+            model_cache.move_to_end(model_id)
+            return cached_model
+
         logger.info(f"Loading embedding model into memory: {model_id}")
 
         # Configure providers based on GPU setting
@@ -19,14 +36,18 @@ def get_model(model_id: str) -> TextEmbedding:
             providers = ["CUDAExecutionProvider"]
             logger.info("GPU acceleration (CUDAExecutionProvider) enabled.")
 
-        model_cache[model_id] = TextEmbedding(
+        model = TextEmbedding(
             model_id, threads=settings.EMBEDDING_THREADS, providers=providers
         )
 
-        providers = model_cache[model_id].model.model.get_providers()
-        logger.info(f"Model {model_id} loaded successfully with providers: {providers}")
+        resolved_providers = model.model.model.get_providers()
+        logger.info(
+            f"Model {model_id} loaded successfully with providers: {resolved_providers}"
+        )
 
-    return model_cache[model_id]
+        model_cache[model_id] = model
+        _evict_lru_models_if_needed()
+        return model
 
 
 def preload_default_model():
