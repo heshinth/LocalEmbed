@@ -1,21 +1,53 @@
+from collections import OrderedDict
+from threading import RLock
 from typing import Iterable
 from pydantic import BaseModel
 from fastembed import TextEmbedding
 from loguru import logger
 from app.config import settings
 
-model_cache: dict[str, TextEmbedding] = {}
+model_cache: OrderedDict[str, TextEmbedding] = OrderedDict()
+model_cache_lock = RLock()
+
+
+def _evict_lru_models_if_needed() -> None:
+    cache_limit = max(1, settings.MODEL_CACHE_LIMIT)
+    while len(model_cache) > cache_limit:
+        evicted_model_id, _ = model_cache.popitem(last=False)
+        logger.info(
+            f"Evicting least recently used embedding model from memory: {evicted_model_id}"
+        )
 
 
 def get_model(model_id: str) -> TextEmbedding:
     """Fetch the model from cache, or load it if not present."""
 
-    if model_id not in model_cache:
+    with model_cache_lock:
+        cached_model = model_cache.get(model_id)
+        if cached_model is not None:
+            model_cache.move_to_end(model_id)
+            return cached_model
+
         logger.info(f"Loading embedding model into memory: {model_id}")
-        model_cache[model_id] = TextEmbedding(
-            model_id, threads=settings.EMBEDDING_THREADS
+
+        # Configure providers based on GPU setting
+        providers = None
+        if settings.USE_GPU:
+            providers = ["CUDAExecutionProvider"]
+            logger.info("GPU acceleration (CUDAExecutionProvider) enabled.")
+
+        model = TextEmbedding(
+            model_id, threads=settings.EMBEDDING_THREADS, providers=providers
         )
-    return model_cache[model_id]
+
+        resolved_providers = model.model.model.get_providers()
+        logger.info(
+            f"Model {model_id} loaded successfully with providers: {resolved_providers}"
+        )
+
+        model_cache[model_id] = model
+        _evict_lru_models_if_needed()
+        return model
 
 
 def preload_default_model():
@@ -47,9 +79,11 @@ def embed_text(
 
     try:
         # model.embed natively batches an iterable of documents giving an iterable of numpy arrays
-        vectors = [vec.tolist() for vec in model.embed(texts,batch_size=settings.BATCH_SIZE)]
+        vectors = [
+            vec.tolist() for vec in model.embed(texts, batch_size=settings.BATCH_SIZE)
+        ]
 
-        # token_count returns an iterator of ints (tokens per document), so we sum them
+        # token_count returns a single int for total tokens
         total_tokens = model.token_count(texts)
 
         return EmbeddingResult(

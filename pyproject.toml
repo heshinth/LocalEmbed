@@ -9,7 +9,6 @@ authors = [
 requires-python = ">=3.12"
 dependencies = [
     "fastapi[standard]<1.0.0,>=0.116.1",
-    "fastembed>=0.8.0",
     "loguru>=0.7.3",
     "pydantic>=2.12.5",
     "pydantic-settings>=2.13.1",
@@ -19,3 +18,10 @@ dependencies = [
 dev = [
     "poethepoet>=0.44.0",
 ]
+
+[project.optional-dependencies]
+cpu = ["fastembed>=0.8.0"]
+gpu = ["fastembed-gpu>=0.8.0"]
+
+[tool.poe.tasks]
+summary = "npx repomix@latest --style markdown"

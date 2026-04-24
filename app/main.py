@@ -41,7 +41,10 @@ app = FastAPI(
 
 @app.get("/")
 def read_root():
-    return {"Project": "LocalEmbed", "description": "LocalEmbed"}
+    return {
+        "Project": "LocalEmbed",
+        "description": "A lightweight text embedding API designed as a drop-in replacement for the OpenAI embeddings endpoint. ",
+    }
 
 
 app.include_router(router)

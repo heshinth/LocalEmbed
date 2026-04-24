@@ -1,0 +1,37 @@
+# We use the lean NVIDIA CUDA runtime as the base so your GPU actually works
+FROM nvidia/cuda:12.4.1-cudnn-runtime-ubuntu22.04
+
+# Python environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Magic trick: Copy the 'uv' binary directly from Astral's official image
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+WORKDIR /app
+
+# Copy your dependency files first (for Docker layer caching)
+COPY pyproject.toml uv.lock README.md .python-version ./
+
+# uv will automatically download Python 3.12 (based on your pyproject.toml),
+RUN uv venv
+
+# and install dependencies into a standalone virtual environment at /app/.venv
+RUN uv sync --locked --no-dev --no-install-project --extra gpu
+
+# Copy your application code
+COPY app ./app
+
+# Run a final sync to install your actual project code
+RUN uv sync --locked --no-dev --extra gpu
+
+# Signal the app to use GPU logic
+ENV USE_GPU=True
+
+EXPOSE 8000
+
+# Put the virtual environment on the PATH so it works natively
+ENV PATH="/app/.venv/bin:$PATH"
+
+# Run Uvicorn directly!
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

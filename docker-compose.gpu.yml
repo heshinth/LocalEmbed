@@ -1,8 +1,8 @@
 services:
   localembed:
-    image: heshinth/localembed:latest
+    image: heshinth/localembed:latest-gpu
     pull_policy: always
-    container_name: localembed
+    container_name: localembed-gpu
     ports:
       - "8000:8000"
     environment:
@@ -11,3 +11,4 @@ services:
       # - MODEL_CACHE_LIMIT=2
       # - EMBEDDING_THREADS=8
       # - BATCH_SIZE=256
+    gpus: all

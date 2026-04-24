@@ -9,7 +9,7 @@ WORKDIR /app
 COPY pyproject.toml uv.lock README.md ./
 
 # We generate a standalone virtual environment
-RUN uv sync --locked --no-cache --no-dev --no-install-project
+RUN uv sync --locked --no-dev --no-install-project --extra cpu
 
 # --- Stage 2: Final Runtime Image ---
 FROM python:3.12-slim-trixie

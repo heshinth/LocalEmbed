@@ -9,11 +9,17 @@ class Settings(BaseSettings):
         env_file=".env", env_file_encoding="utf-8", extra="ignore"
     )
 
+    USE_GPU: bool = False
+    """Toggle to enable CUDA Execution Provider logic"""
+
     HF_TOKEN: SecretStr | None = None
     """Hugging Face API token. Optional"""
 
     DEFAULT_EMBEDDING_MODEL: str = "BAAI/bge-small-en-v1.5"
     """The default embedding model to use."""
+
+    MODEL_CACHE_LIMIT: int = 2
+    """Maximum number of models to keep in memory (LRU eviction)."""
 
     EMBEDDING_THREADS: int = 8
     """Number of threads to use for embedding generation. Adjust based on your CPU capabilities."""
