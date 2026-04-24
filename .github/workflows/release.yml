@@ -91,17 +91,17 @@ jobs:
                   body: |
                       For full documentation, supported models, and usage examples, please check the [README](https://github.com/heshinth/LocalEmbed/blob/main/README.md).
 
-                      **CPU Quick Start:**
+                      ### **CPU Quick Start:**
                       ```bash
                       docker run -d --name localembed -p 8000:8000 heshinth/localembed:${{ steps.version.outputs.semver }}
                       ```
 
-                      **GPU Quick Start:**
+                      ### **GPU Quick Start:**
                       ```bash
                       docker run -d --gpus all --name localembed-gpu -p 8000:8000 heshinth/localembed:${{ steps.version.outputs.semver }}-gpu
                       ```
 
-                      **Latest tags:**
+                      ### **Latest tags:**
                       ```bash
                       heshinth/localembed:latest
                       heshinth/localembed:latest-gpu
