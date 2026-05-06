@@ -120,7 +120,7 @@ For local GPU mode:
    ```bash
    USE_GPU=true fastapi dev app/main.py
    ```
-
+---
 ## API Endpoints
 
 - `GET /v1/health` — Health check
